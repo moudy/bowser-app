@@ -23,7 +23,9 @@ const plugins = [
   new HtmlWebpackPlugin(),
   new webpack.NoErrorsPlugin(),
   new webpack.DefinePlugin({
-    __ENV__: JSON.stringify(process.env.NODE_ENV || 'development'),
+    'process.env': {
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
+    }
   })
 ];
 
@@ -66,7 +68,7 @@ config.module = {
       loader: 'babel',
       query: {
         cacheDirectory: true,
-        presets: ['es2015', 'stage-1'],
+        presets: ['es2015', 'stage-1', 'react'],
       }
     }
   ]
