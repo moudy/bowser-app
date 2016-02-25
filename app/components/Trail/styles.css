@@ -1,0 +1,30 @@
+.root {
+  position: fixed;
+  top: 20px;
+  right: 32px;
+}
+
+.node {
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  text-align: center;
+  line-height: 24px;
+
+  background-color: #ddd;
+  color: #444;
+  margin-bottom: 10px;
+
+  cursor: pointer;
+}
+
+.active {
+}
+
+.selected {
+  transform: scale(1.1);
+  background-color: #2E76FF;
+  color: white;
+}

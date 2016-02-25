@@ -1,0 +1,21 @@
+
+.root {
+  position: relative;
+  border: 1px solid #ccc;
+  flex: 1 0 auto;
+  /*transition: transform 200ms;*/
+  /*transform: scale(0.8);*/
+}
+
+.root iframe {
+  /*border: 0 none;*/
+  /*width: 100%;*/
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  border: 0 none;
+  border: 1px solid #C1C1C1;
+  border-top: 0 none;
+}

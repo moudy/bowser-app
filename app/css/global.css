@@ -6,3 +6,7 @@ html {
   box-sizing: inherit;
 }
 
+html, body {
+  background-color: #232323;
+}
+
