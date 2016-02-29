@@ -1,4 +1,4 @@
-import React from 'react'; // eslint-disable-line
+import React from 'react';
 import {TransitionMotion, spring} from 'react-motion';
 
 import PageGroup from 'app/components/PageGroup';
@@ -77,22 +77,6 @@ class App extends React.Component {
     const yStaggerAmount = 18;
 
     const springOptions = {stiffness: 200, damping: 25};
-
-    if (count === 1) {
-      return [{
-        key: 0,
-        data: pageGroups[0],
-        style: {
-          opacity: spring(1, {...springOptions}),
-          scale: spring(1, {...springOptions}),
-          translateY: spring(0, {...springOptions}),
-          top: spring(-27, {...springOptions}),
-          left: spring(0, {...springOptions}),
-          right: spring(0, {...springOptions}),
-          bottom: spring(0, {...springOptions}),
-        },
-      }];
-    }
 
     return currentPageGroups.map((page, index) => {
       const translateY = yStaggerAmount * (index + 1);

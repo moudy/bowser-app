@@ -1,0 +1,71 @@
+.root {
+  color: white;
+  text-align: center;
+  padding: 10px;
+}
+
+.title {
+  font-size: 24px;
+  margin: 0;
+  padding: 10px;
+  text-shadow: 0 5px 7px #000;
+}
+
+.subtitle {
+  font-weight: normal;
+  font-size: 18px;
+  margin: 0;
+  text-shadow: 0 4px 5px #000;
+  font-style: italic;
+  padding-bottom: 10px;
+}
+
+.image {
+  max-width: 100%;
+}
+
+.button {
+  color: white;
+  background: white;
+  padding: 10px 15px;
+  color: #444;
+  border-radius: 20px;
+  display: inline-block;
+  text-decoration: none;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 5px #000;
+}
+
+.button:hover {
+  box-shadow: 0 7px 8px #000;
+}
+
+.input {
+  color: #444;
+  border: 0 none;
+  margin: 0;
+  padding: 8px;
+}
+
+.input:focus {
+  outline: none;
+}
+
+form {
+  padding: 10px;
+}
+
+form button {
+  background: white;
+  color: #444;
+  border: 0 none;
+  padding: 8px;
+  margin-left: 4px;
+  box-shadow: 0 4px 5px #000;
+}
+
+form button:hover {
+  box-shadow: 0 7px 8px #000;
+}
