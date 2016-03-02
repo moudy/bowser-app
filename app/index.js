@@ -4,24 +4,30 @@ import './css/global.css';
 
 import React from 'react'; // eslint-disable-line
 import ReactDOM from 'react-dom';
+import {Provider} from 'react-redux';
+import {createStore} from 'redux';
 
 import App from 'app/components/App';
 import Foyer from 'app/components/Foyer';
-
-// TODO = Move this into index.html template
-const link = document.createElement('link');
-link.rel = 'chrome-webstore-item';
-link.href = 'https://chrome.google.com/webstore/detail/ehifphmcdbhocdmdadjefoodhdapgnid';
-document.head.appendChild(link);
-
-const main = document.createElement('main');
-document.body.appendChild(main);
+import reducers from 'app/reducers';
+import {Graph} from 'graphlib';
 
 const url = document.location.hash.substr(1);
+const main = document.getElementsByTagName('main')[0];
 
-if (url) {
-  ReactDOM.render(<App url={url} />, main);
-} else {
-  ReactDOM.render(<Foyer />, main);
-}
+const app = () => {
+  if (!url) return <Foyer/>;
+  const graph = new Graph();
+  graph.setNode(url);
 
+  const state = {
+    graph,
+    root: url,
+    currentUrl: url,
+    currentPageGroup: 0,
+  };
+  const store = createStore(reducers, state);
+  return <Provider store={store}><App/></Provider>;
+};
+
+ReactDOM.render(app(), main);

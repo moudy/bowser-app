@@ -1,7 +1,6 @@
 .root {
-  position: fixed;
-  top: 20px;
-  right: 32px;
+  flex: 0 1 auto;
+  padding: 20px 20px;
 }
 
 .node {

@@ -8,8 +8,13 @@ html {
 
 html, body {
   background-color: #232323;
+  height: 100%;
 }
 
 body {
   font-family: -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif;
+}
+
+main {
+  height: 100%;
 }

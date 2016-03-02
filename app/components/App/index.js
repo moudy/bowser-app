@@ -1,155 +1,143 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import {TransitionMotion, spring} from 'react-motion';
 
 import PageGroup from 'app/components/PageGroup';
 import Trail from 'app/components/Trail';
+import {addPage, selectPageGroup} from 'app/actions';
+
+import styles from './styles.scss';
+
+const styleForPageGroup = ({opacity, scale, translateY, top, left, right, bottom}) => ({
+  opacity,
+  top,
+  left,
+  right,
+  bottom,
+  transform: `scale(${scale}) translateY(${translateY}px)`,
+  transformOrigin: 'center top',
+  background: 'white',
+  position: 'absolute',
+});
+
+const transtionMotionStyles = ({currentPageGroup, pageGroups}) => {
+  const currentPageGroups = pageGroups.slice(0, currentPageGroup + 1);
+  const count = currentPageGroups.length;
+  const yStaggerAmount = 18;
+
+  const springOptions = {stiffness: 200, damping: 25};
+
+  return currentPageGroups.map((page, index) => {
+    const translateY = yStaggerAmount * (index + 1);
+    const scale = 1 - (((count - (index + 1)) / 100) * 2);
+    return {
+      key: index,
+      data: page,
+      style: {
+        opacity: spring(1, {...springOptions}),
+        scale: spring(scale, {...springOptions}),
+        translateY: spring(translateY, {...springOptions}),
+        top: spring(0, {...springOptions}),
+        left: spring(0, {...springOptions}),
+        right: spring(0, {...springOptions}),
+        bottom: spring(0, {...springOptions}),
+      }
+    };
+  });
+};
+
+
+const willEnter = ({style: {translateY: {val}}}) => {
+  return {
+    opacity: 0,
+    scale: 1.1,
+    translateY: val + 30,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  };
+};
+
+const willLeave = ({style: {translateY: {val}}}) => {
+  const springOptions = {stiffness: 200, damping: 25};
+  return {
+    opacity: spring(0, {...springOptions}),
+    scale: spring(1.2, {...springOptions}),
+    translateY: spring(val, {...springOptions}),
+    top: spring(0, {...springOptions}),
+    left: spring(0, {...springOptions}),
+    right: spring(0, {...springOptions}),
+    bottom: spring(0, {...springOptions}),
+  };
+};
 
 class App extends React.Component {
 
   componentDidMount() {
-    window.addEventListener('message', (msg) => this.addPage(msg.data));
-    const {url} = this.props;
-    const pageGroups = [
-      [{url}]
-    ];
-
-    this.setState({
-      pageGroups,
-      currentPageGroup: 0
-    });
-  }
-
-  addPage(page) {
-    const {pageGroups, currentPageGroup} = this.state;
-    const newPageGroup = currentPageGroup + 1;
-
-    let pageIndex;
-    if (pageGroups[newPageGroup]) {
-      const existing = pageGroups[newPageGroup].find((p) =>p.url === page.url);
-      if (existing) {
-        pageIndex = pageGroups[newPageGroup].indexOf(existing);
-      } else {
-        pageGroups[newPageGroup].unshift(page);
+    // message from iframe via chrome-extension
+    window.addEventListener('message', (msg) => {
+      console.log('msg', msg.data);
+      if (msg.data.id === 'bowser-click') {
+        this.props.onPageClick(msg.data);
       }
-    } else {
-      pageGroups[newPageGroup] = [page];
-    }
-
-    if (pageIndex !== undefined) {
-      console.log(`TODO - make sure page ${pageIndex} is selected`);
-    }
-
-    this.setState({
-      pageGroups,
-      currentPageGroup: newPageGroup
-    });
-  }
-
-  willEnter({style: {translateY: {val}}}) {
-    return {
-      opacity: 0,
-      scale: 1.1,
-      translateY: val + 30,
-      top: 0,
-      left: 20,
-      right: 90,
-      bottom: 0,
-    };
-  }
-
-  willLeave({style: {translateY: {val}}}) {
-    const springOptions = {stiffness: 200, damping: 25};
-    return {
-      opacity: spring(0, {...springOptions}),
-      scale: spring(1.2, {...springOptions}),
-      translateY: spring(val + 30, {...springOptions}),
-      top: spring(0, {...springOptions}),
-      left: spring(0, {...springOptions}),
-      right: spring(0, {...springOptions}),
-      bottom: spring(0, {...springOptions}),
-    };
-  }
-
-  transtionStyles() {
-    const {pageGroups, currentPageGroup} = this.state;
-    const currentPageGroups = pageGroups.slice(0, currentPageGroup + 1);
-    const count = currentPageGroups.length;
-    const yStaggerAmount = 18;
-
-    const springOptions = {stiffness: 200, damping: 25};
-
-    return currentPageGroups.map((page, index) => {
-      const translateY = yStaggerAmount * (index + 1);
-      const scale = 1 - (((count - (index + 1)) / 100) * 2);
-      return {
-        key: index,
-        data: page,
-        style: {
-          opacity: spring(1, {...springOptions}),
-          scale: spring(scale, {...springOptions}),
-          translateY: spring(translateY, {...springOptions}),
-          top: spring(0, {...springOptions}),
-          left: spring(20, {...springOptions}),
-          right: spring(90, {...springOptions}),
-          bottom: spring(0, {...springOptions}),
-        }
-      };
-    });
-  }
-
-  didSelectPageGroup = (index) => {
-    this.setState({
-      currentPageGroup: index
     });
   }
 
   render() {
-    if (!this.state) return <div />;
-
-    const pageGroups = this.state.pageGroups.map(p => p.length);
-    const currentPageGroup = this.state.currentPageGroup;
+    const {
+      currentPageGroup,
+      pageGroups,
+      onSelectPageGroup,
+    } = this.props;
 
     return (
-      <div>
-      <TransitionMotion
-        willLeave={this.willLeave}
-        willEnter={this.willEnter}
-        styles={this.transtionStyles()}>
-        {interpolatedStyles =>
-          <div>
-            {interpolatedStyles.map(({key, style, data}, index) => {
-              return (
-                <div
-                  key={key}
-                  style={{
-                    opacity: style.opacity,
-                    transform: `scale(${style.scale}) translateY(${style.translateY}px)`,
-                    transformOrigin: 'center top',
-                    background: 'white',
-                    position: 'fixed',
-                    top: style.top,
-                    left: style.left,
-                    right: style.right,
-                    bottom: style.bottom,
-                  }}>
-                  <PageGroup
-                    index={index}
-                    isTop={index === currentPageGroup}
-                    didSelectPageGroup={this.didSelectPageGroup}
-                    pages={data} />
-                </div>
-              );
-            })}
-          </div>
-        }
-      </TransitionMotion>
-      <Trail
-        pageGroups={pageGroups}
-        onNodeClick={this.didSelectPageGroup}
-        currentPageGroup={currentPageGroup}/>
+      <div className={styles.root}>
+        <TransitionMotion
+          willLeave={willLeave}
+          willEnter={willEnter}
+          styles={transtionMotionStyles({currentPageGroup, pageGroups})}>
+          {interpolatedStyles =>
+            <div className={styles.content}>
+              {interpolatedStyles.map(({key, style, data}, index) => {
+                return (
+                  <div key={key} style={styleForPageGroup(style)}>
+                    <PageGroup
+                      index={index}
+                      isTop={index === currentPageGroup}
+                      didSelectPageGroup={onSelectPageGroup}
+                      pages={data} />
+                  </div>
+                );
+              })}
+            </div>
+          }
+        </TransitionMotion>
+        <Trail
+          pageGroups={pageGroups.map(pg => pg.length)}
+          onNodeClick={onSelectPageGroup}
+          currentPageGroup={currentPageGroup}/>
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = ({pageGroups, currentPageGroup}) => {
+  return {
+    pageGroups,
+    currentPageGroup
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onPageClick: (data) => {
+      dispatch(addPage(data));
+    },
+    onSelectPageGroup: (index) => {
+      dispatch(selectPageGroup({index}));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

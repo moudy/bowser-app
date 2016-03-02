@@ -8,6 +8,7 @@
 }
 
 .root iframe {
+  /*visibility: hidden;*/
   /*border: 0 none;*/
   /*width: 100%;*/
   position: absolute;

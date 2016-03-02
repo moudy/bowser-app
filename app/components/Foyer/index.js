@@ -6,9 +6,22 @@ import screenshot from './screenshot.png';
 const extensionUrl = 'https://chrome.google.com/webstore/detail/bowser/ehifphmcdbhocdmdadjefoodhdapgnid';
 
 class Foyer extends React.Component {
+  componentDidMount() {
+    window.addEventListener('message', (msg) => {
+      msg.data.id === 'bowser-installed' && this.setState({isInstalled: true});
+    });
+  }
+
   render() {
-    const isInstalled = window.chrome && window.chrome.app.isInstalled;
-    const onClick = () => { window.location = extensionUrl; };
+    const isInstalled = this.state && this.state.isInstalled;
+    const onClick = () => {
+      chrome.webstore.install(
+        extensionUrl,
+        function() { console.log('s --->', arguments); },
+        function() { console.log('e --->', arguments); }
+      );
+      /* window.location = extensionUrl; */
+    };
 
     const onSubmit = (e) => {
       e.preventDefault();
@@ -48,7 +61,9 @@ class Foyer extends React.Component {
 
         {input}
 
-        <img className={styles.image} src={screenshot} />
+        <div>
+          <img className={styles.image} src={screenshot} />
+        </div>
       </div>
     );
   }

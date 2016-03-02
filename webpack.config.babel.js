@@ -5,7 +5,7 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 const DEV_PORT = 8093;
 const isProduction = process.env.NODE_ENV === 'production';
 const devOrigin = `http://localhost:${DEV_PORT}/`;
-const PublicPath = isProduction ? 'https://s3.amazonaws.com/react-starter.com/' : devOrigin;
+const PublicPath = isProduction ? 'https://s3.amazonaws.com/bowser.moudy.me/' : devOrigin;
 const JSFilename = isProduction ? 'app.[hash].js' : 'app.js';
 const CSSFilename = isProduction ? '[name].[hash].css' : '[name].css';
 const AppEntry = ['./index.js'];
@@ -13,6 +13,7 @@ const AppEntry = ['./index.js'];
 const cssLoaders = [
   'css-loader?modules&localIdentName=[path][name]__[local]__[hash:base64:5]',
   'autoprefixer-loader?browsers=last 2 versions',
+  'sass',
 ];
 
 if (!isProduction) {
@@ -20,7 +21,9 @@ if (!isProduction) {
 }
 
 const plugins = [
-  new HtmlWebpackPlugin(),
+  new HtmlWebpackPlugin({
+    template: 'index.ejs',
+  }),
   new webpack.NoErrorsPlugin(),
   new webpack.DefinePlugin({
     'process.env': {
@@ -83,12 +86,12 @@ config.module = {
 
 if (isProduction) {
   config.module.loaders.push({
-    test: /\.css$/,
+    test: /\.(css|scss)$/,
     loader: ExtractTextPlugin.extract('style-loader', cssLoaders.join('!'))
   });
 } else {
   config.module.loaders.push({
-    test: /\.css$/,
+    test: /\.(css|scss)$/,
     loader: cssLoaders.join('!')
   });
 }
