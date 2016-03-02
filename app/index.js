@@ -18,7 +18,7 @@ const main = document.getElementsByTagName('main')[0];
 const app = () => {
   if (!url) return <Foyer/>;
   const graph = new Graph();
-  graph.setNode(url);
+  graph.setNode(`0:${url}`, {url});
 
   const state = {
     graph,

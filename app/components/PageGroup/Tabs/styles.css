@@ -20,14 +20,11 @@
 }
 
 .tab {
-  padding: 5px 5px;
   border-left: 1px solid #C1C1C1;
-  text-align: center;
-  font-size: 0.8rem;
-  color: #999;
-  white-space: nowrap;
-    overflow: hidden;
-      text-overflow: ellipsis;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
 }
 
 .tab:first-child {
@@ -36,5 +33,19 @@
 
 .selected {
   color: #444;
-  /*background-color: #E0EBFF;*/
+}
+
+.tabTitle {
+  padding: 5px;
+  flex: 1 0 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #999;
+}
+
+.closeButton {
+  padding: 5px;
 }

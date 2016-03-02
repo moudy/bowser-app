@@ -30,7 +30,14 @@ class PageGroup extends React.Component {
   }
 
   render() {
-    const {pages, isTop} = this.props;
+    const {
+      pages,
+      isTop,
+      shouldLoad,
+      didClosePage,
+      pageGroup,
+    } = this.props;
+
     const {currentPage} = this.state;
     const page = pages[currentPage];
 
@@ -38,10 +45,12 @@ class PageGroup extends React.Component {
       <div className={styles.root}>
         <Tabs
           selected={isTop}
+          pageGroup={pageGroup}
           currentPage={currentPage}
           pages={pages}
-          didSelectPage={this.didSelectPage} />
-        <Iframe src={page.url} />
+          didSelectPage={this.didSelectPage}
+          didClosePage={didClosePage} />
+            <Iframe shouldLoad={shouldLoad} src={page.url} />;
       </div>
     );
   }

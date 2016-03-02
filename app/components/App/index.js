@@ -4,7 +4,11 @@ import {TransitionMotion, spring} from 'react-motion';
 
 import PageGroup from 'app/components/PageGroup';
 import Trail from 'app/components/Trail';
-import {addPage, selectPageGroup} from 'app/actions';
+import {
+  addPage,
+  selectPageGroup,
+  closePage
+} from 'app/actions';
 
 import styles from './styles.scss';
 
@@ -16,7 +20,6 @@ const styleForPageGroup = ({opacity, scale, translateY, top, left, right, bottom
   bottom,
   transform: `scale(${scale}) translateY(${translateY}px)`,
   transformOrigin: 'center top',
-  background: 'white',
   position: 'absolute',
 });
 
@@ -77,7 +80,6 @@ class App extends React.Component {
   componentDidMount() {
     // message from iframe via chrome-extension
     window.addEventListener('message', (msg) => {
-      console.log('msg', msg.data);
       if (msg.data.id === 'bowser-click') {
         this.props.onPageClick(msg.data);
       }
@@ -89,6 +91,7 @@ class App extends React.Component {
       currentPageGroup,
       pageGroups,
       onSelectPageGroup,
+      onDidClosePage,
     } = this.props;
 
     return (
@@ -100,12 +103,16 @@ class App extends React.Component {
           {interpolatedStyles =>
             <div className={styles.content}>
               {interpolatedStyles.map(({key, style, data}, index) => {
+                const isTop = index === currentPageGroup;
                 return (
                   <div key={key} style={styleForPageGroup(style)}>
                     <PageGroup
                       index={index}
-                      isTop={index === currentPageGroup}
+                      isTop={isTop}
+                      shouldLoad={!isTop || style.scale === 1}
                       didSelectPageGroup={onSelectPageGroup}
+                      didClosePage={onDidClosePage}
+                      pageGroup={index}
                       pages={data} />
                   </div>
                 );
@@ -136,6 +143,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     onSelectPageGroup: (index) => {
       dispatch(selectPageGroup({index}));
+    },
+    onDidClosePage: (data) => {
+      dispatch(closePage(data));
     }
   };
 };
