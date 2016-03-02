@@ -36,7 +36,7 @@ class Foyer extends React.Component {
       ? (
         <form onSubmit={onSubmit}>
           <input
-            placeholder='Enter starting url'
+            placeholder='Enter url...'
             className={styles.input}
             ref='input' />
             <button>
