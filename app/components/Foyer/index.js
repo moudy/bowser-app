@@ -56,7 +56,7 @@ class Foyer extends React.Component {
           Bowser
         </h1>
         <h2 className={styles.subtitle}>
-          Layered Browsing in Chrome
+          Layered Browsing
         </h2>
 
         {input}

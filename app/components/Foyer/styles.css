@@ -1,7 +1,7 @@
 .root {
   color: #444;
   text-align: center;
-  padding: 10px;
+  padding: 10px 10px 0;
 }
 
 .content {
@@ -10,17 +10,18 @@
 
 .title {
   font-size: 24px;
-  margin: 0;
-  padding: 10px;
-  /*text-shadow: 0 5px 7px #000;*/
+  margin: 30px 0 10px;
+  padding: 11px;
+  background-image: url('./logo.svg');
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+  color: transparent;
 }
 
 .subtitle {
-  font-weight: normal;
   font-size: 18px;
   margin: 0;
-  /*text-shadow: 0 4px 5px #000;*/
-  font-style: italic;
   padding-bottom: 10px;
 }
 
@@ -48,7 +49,8 @@
 
 .input {
   color: #444;
-  border: 0 none;
+  border: 1px solid #ccc;
+  border-right: 0 none;
   margin: 0;
   padding: 8px;
 }
@@ -59,13 +61,15 @@
 
 form {
   padding: 22px;
+  display: flex;
+  justify-content: center;
 }
 
 form button {
   color: white;
   border: 0 none;
   padding: 8px;
-  margin-left: 4px;
+  /*margin-left: 4px;*/
   background-color: #2E76FF;
   /*box-shadow: 0 4px 5px #000;*/
 }
